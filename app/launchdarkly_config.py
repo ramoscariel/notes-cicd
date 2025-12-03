@@ -25,6 +25,7 @@ def initialize_launchdarkly():
 
     return client
 
+
 # Cliente global de LaunchDarkly
 ld_client = initialize_launchdarkly()
 
