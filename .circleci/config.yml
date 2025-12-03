@@ -83,8 +83,32 @@ jobs:
             docker push $DOCKER_USERNAME/notes-app:$CIRCLE_SHA1
             docker push $DOCKER_USERNAME/notes-app:latest
 
+  update-k8s-manifests:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Install yq
+          command: |
+            sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+            sudo chmod +x /usr/local/bin/yq
+      - run:
+          name: Update Kubernetes manifest with new image tag
+          command: |
+            cd k8s/base
+            yq eval '.spec.template.spec.containers[0].image = env(DOCKER_USERNAME) + "/notes-app:" + env(CIRCLE_SHA1)' -i deployment.yaml
+      - run:
+          name: Commit and push changes
+          command: |
+            git config user.email "ci@circleci.com"
+            git config user.name "CircleCI"
+            git add k8s/base/deployment.yaml
+            git commit -m "Update image tag to $CIRCLE_SHA1 [skip ci]"
+            git push origin main
+
 workflows:
-  ci_pipeline:
+  ci_cd_pipeline:
     jobs:
       - build
       - lint:
@@ -96,3 +120,9 @@ workflows:
       - build-image:
           requires:
             - test
+      - update-k8s-manifests:
+          requires:
+            - build-image
+          filters:
+            branches:
+              only: main
