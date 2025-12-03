@@ -18,3 +18,10 @@ Proyecto de prueba CICD, CircleCI, Argo CD, LaunchDarkly.
 ## Run
 
 `uvicorn app.main:app --reload`
+
+
+## Build Image
+
+`docker build -t notes-api .`
+
+`docker run -d -p 8000:8000 --name notes-app notes-api`
