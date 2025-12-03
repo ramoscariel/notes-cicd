@@ -15,33 +15,33 @@ spec:
         app: notes-app
     spec:
       containers:
-      - name: notes-app
-        image: YOUR_DOCKER_USERNAME/notes-app:latest
-        ports:
-        - containerPort: 8000
-          name: http
-        env:
-        - name: LAUNCHDARKLY_SDK_KEY
-          valueFrom:
-            secretKeyRef:
-              name: launchdarkly-secret
-              key: sdk-key
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "256Mi"
-            cpu: "200m"
-        livenessProbe:
-          httpGet:
-            path: /notes
-            port: 8000
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /notes
-            port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 5
+        - name: notes-app
+          image: akar3f/notes-app:015cb47df0f6f5fc24ba87771dd4788ebf9cc7f3
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            - name: LAUNCHDARKLY_SDK_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: launchdarkly-secret
+                  key: sdk-key
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /notes
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /notes
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
