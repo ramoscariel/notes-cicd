@@ -87,6 +87,9 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - ${SSH_KEY_FINGERPRINT}
       - checkout
       - run:
           name: Install yq
