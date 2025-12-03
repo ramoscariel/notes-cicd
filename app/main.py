@@ -20,7 +20,8 @@ def create(note: NoteCreate):
 @app.get("/notes", response_model=list[Note])
 def list_notes():
     # Feature flag: habilitar filtrado mejorado de notas
-    enhanced_filtering = get_feature_flag("enhanced-note-filtering", "user-1", False)
+    enhanced_filtering = get_feature_flag(
+        "enhanced-note-filtering", "user-1", False)
 
     notes = get_notes()
 
@@ -42,7 +43,8 @@ def get(note_id: int):
 @app.delete("/notes/{note_id}")
 def delete(note_id: int):
     # Feature flag: habilitar confirmación extendida en eliminación
-    extended_delete_response = get_feature_flag("extended-delete-response", "user-1", False)
+    extended_delete_response = get_feature_flag(
+        "extended-delete-response", "user-1", False)
 
     deleted = delete_note(note_id)
     if not deleted:
@@ -64,7 +66,9 @@ def health_check():
         "status": "healthy",
         "service": "notes-api",
         "feature_flags": {
-            "enhanced-note-filtering": get_feature_flag("enhanced-note-filtering", "user-1", False),
-            "extended-delete-response": get_feature_flag("extended-delete-response", "user-1", False)
+            "enhanced-note-filtering": get_feature_flag(
+                "enhanced-note-filtering", "user-1", False),
+            "extended-delete-response": get_feature_flag(
+                "extended-delete-response", "user-1", False)
         }
     }

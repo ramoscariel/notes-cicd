@@ -7,9 +7,12 @@ from ldclient import Context
 LAUNCHDARKLY_SDK_KEY = os.getenv("LAUNCHDARKLY_SDK_KEY", "")
 
 # Inicializar el cliente de LaunchDarkly
+
+
 def initialize_launchdarkly():
     if not LAUNCHDARKLY_SDK_KEY:
-        print("WARNING: LaunchDarkly SDK key not found. Feature flags will be disabled.")
+        print("WARNING: LaunchDarkly SDK key not found. "
+              "Feature flags will be disabled.")
         return None
 
     ldclient.set_config(Config(LAUNCHDARKLY_SDK_KEY))
@@ -25,7 +28,9 @@ def initialize_launchdarkly():
 # Cliente global de LaunchDarkly
 ld_client = initialize_launchdarkly()
 
-def get_feature_flag(flag_key: str, user_key: str = "anonymous", default_value: bool = False) -> bool:
+
+def get_feature_flag(flag_key: str, user_key: str = "anonymous",
+                     default_value: bool = False) -> bool:
     """
     Obtiene el valor de un feature flag de LaunchDarkly
 
@@ -42,6 +47,7 @@ def get_feature_flag(flag_key: str, user_key: str = "anonymous", default_value: 
 
     context = Context.builder(user_key).build()
     return ld_client.variation(flag_key, context, default_value)
+
 
 def close_launchdarkly():
     """Cierra la conexión con LaunchDarkly"""
